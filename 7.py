@@ -12,7 +12,6 @@ def part1():
         for bag in bags[1:]:
             v = " ".join(bag.strip().split()[:2])
             graph[v].append(u)
-
     return bfs(graph)
 
 def part2():
@@ -25,8 +24,6 @@ def part2():
             if not q[i].isdigit():
                 continue
             graph[u].append((" ".join(q[i+1:i+3]), int(q[i])))
-
-
     return dfsHelper(start, graph) - 1
 
 def bfs(graph):
@@ -36,10 +33,7 @@ def bfs(graph):
     Q = deque([start])
     while Q:
         u = Q.popleft()
-
-        if u in visited:
-            continue
-
+        if u in visited: continue
         visited.add(u)
         count += 1
         for n in graph[u]:
@@ -51,25 +45,10 @@ def dfsHelper(node, graph):
     global dp
     dp[node] = 1
     for n, weight in graph[node]:
-        if n in dp:
-            dp[node] += weight * dp[n]
-        else:
-            dp[node] += weight* dfsHelper(n, graph)
-
+        if n in dp: dp[node] += weight * dp[n]
+        else: dp[node] += weight* dfsHelper(n, graph)
     return dp[node]
 
 data = sys.stdin.read().strip().split('\n')
 start, n, dp = "shiny gold", len(data), dict()
-
 print(part1(),part2())
-
-
-
-
-
-
-
-
-
-
-#
