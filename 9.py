@@ -1,46 +1,35 @@
 import sys
 
-def part2(xs, s):
-    f = False
-    for i in range(len(xs)-1, -1, -1):
-        l = [xs[i]]
-        curr_sum = s-xs[i]
-        for j in range(i-1, -1, -1):
-            if j < 0 or curr_sum < 0:
-                break
-            curr_sum -= xs[j]
-            l.append(xs[j])
-            if curr_sum == 0:
-                f = True
-                break
-        if f:
-            break
+def part2(s):
+    global data
+    window = [0, 1]
+    while window[1] < len(data):
+        slice = data[window[0]:window[1]]
+        curr_sum = sum(slice)
+        if curr_sum == s:
+            return min(slice) + max(slice)
+        if curr_sum < s:
+            window[1] += 1
+        if curr_sum > s:
+            window[0] += 1
+        if window[1] == window[0]:
+            window[1] += 1
 
-    l.sort()
-    return l[0] + l[-1]
+def part1(K):
+    global data
+    indx = K
+    window = [0, K]
+    while indx <= len(data):
+        if not any(i+j==data[indx] for i in data[window[0]:window[1]] for j in data[window[0]:window[1]]):
+            return data[indx]
+        #map(lambda x : x + 1, window)
+        window[0] += 1
+        window[1] += 1
+        indx += 1
+    return data[indx]
 
 
-K = 25
 data = list(map(int, sys.stdin.read().strip().split('\n')))
-indx = 25
-ans = -1
-found = False
-while indx <= len(data):
-    for i in range(indx-K,indx):
-        for j in range(indx-K, indx):
-            a, b = data[i], data[j]
-            if a==b:
-                continue
-            q = data[indx]
-            if a + b == q:
-                found = True
-                break
-        if found:
-            break
-    if not found:
-        break
-    found = False
-    indx += 1
 
-p1 = data[indx]
-print(p1, part2(data[:indx], p1))
+p1 = part1(25)
+print(part2(p1), p1)
