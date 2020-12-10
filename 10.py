@@ -20,9 +20,20 @@ def count(ys, start, goal):
     dp[k] = ways
     return ways
 
+def vectorized_memo():
+    global xs
+    xs.insert(0, 0)
+    memo = [0]*len(xs)
+    memo[0] = 1
+    for i in range(len(xs)):
+        for j in range(i+1, len(xs)):
+            if xs[j] - xs[i]  > 3: break
+            memo[j] += memo[i]
+
+    print(memo[len(xs)-1])
+
 def part2():
     global m, xs
-    xs.append(xs[-1])
     mem = defaultdict(int)
     mem[0] = 1
     for block in xs:
@@ -56,7 +67,6 @@ for line in sys.stdin:
 
 
 xs.sort()
+xs.append(xs[-1] + 3)
 dp = dict()
-print(count(xs, 0, xs[-1] + 3))
-print(part1())
-print(part2())
+print(vectorized_memo())
